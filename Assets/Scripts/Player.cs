@@ -1,11 +1,11 @@
 using UnityEngine;
 
-public class Player: MonoBehaviour
+public class Player : MonoBehaviour
 {
     public Sprite[] sprites;
     public Sprite jumpPrite;
     public Sprite dieSprite;
-    public float gravity = -9.8f;
+    public float gravity = 9.8f;
     public float strength = 5f;
     public AudioSource jumpAudio;
     public AudioSource landAudio;
@@ -15,6 +15,7 @@ public class Player: MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private int spriteIndex = 0;
     private bool jumping = false;
+    private int jumpSlots = 2;
     private Vector3 direction;
 
     private void OnEnable()
@@ -54,31 +55,42 @@ public class Player: MonoBehaviour
     }
     private void Update()
     {
-        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)) && !jumping)
+        bool touched = false;
+        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)) && jumpSlots != 0)
         {
-            direction += strength * Vector3.up;
-            jumping = true;
-            jumpAudio.Play();
-            landAudio.Pause();
+            Jump();
+            touched = true;
         }
 
-        if (Input.touchCount > 0 && !jumping)
+        if (Input.touchCount > 0 && jumpSlots != 0)
         {
             Touch touch = Input.GetTouch(0);
 
             if (touch.phase == TouchPhase.Began)
             {
-                direction += strength * Vector3.up;
-                jumping = true;
-                jumpAudio.Play();
-                landAudio.Pause();
+                Jump();
+                touched = true;
             }
         }
-        if (jumping)
+        if (jumping && !touched)
         {
-            direction += Vector3.up * gravity * Time.deltaTime;
-            transform.position += direction * Time.deltaTime;
+            Falling();
         }
+    }
+
+    private void Falling()
+    {
+        direction += Vector3.down * gravity * Time.deltaTime;
+        transform.position += direction * Time.deltaTime;
+    }
+
+    private void Jump()
+    {
+        direction += strength * Vector3.up;
+        jumping = true;
+        jumpSlots--;
+        jumpAudio.Play();
+        landAudio.Pause();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -87,6 +99,7 @@ public class Player: MonoBehaviour
         {
             landAudio.Play();
             jumping = false;
+            jumpSlots = 2;
             direction = Vector3.zero;
         }
 

@@ -6,10 +6,15 @@ public class GameManager : MonoBehaviour
     public GameObject replayButton;
     public Player player;
     public Spawner spawner;
+    public AudioSource theme;
+    public AudioSource button;
+
     private void Start()
     {
         gameOver.SetActive(false);
-        Pause();
+        theme.loop = true;
+        theme.Play();
+        spawner.enabled = false;
     }
     public void Play()
     {
@@ -17,6 +22,8 @@ public class GameManager : MonoBehaviour
         replayButton.SetActive(false);
         gameOver.SetActive(false);
         player.enabled = true;
+        spawner.enabled = true;
+        button.Play();
 
         SpawnChild[] cactus = FindObjectsOfType<SpawnChild>();
 
@@ -31,7 +38,6 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 0f;
         replayButton.SetActive(true);
-        player.enabled = false;
     }
     public void GameOver()
     {
