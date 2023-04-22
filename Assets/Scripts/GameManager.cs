@@ -18,12 +18,12 @@ public class GameManager : MonoBehaviour
         gameOver.SetActive(false);
         player.enabled = true;
 
-        SpawnChild[] catus = FindObjectsOfType<SpawnChild>();
+        SpawnChild[] cactus = FindObjectsOfType<SpawnChild>();
 
-        for (int i = 0; i < catus.Length; i++)
+        for (int i = 0; i < cactus.Length; i++)
         {
-            if (catus[i].CompareTag("Cactus"))
-                Destroy(catus[i].gameObject);
+            if (cactus[i].CompareTag("Cactus"))
+                Destroy(cactus[i].gameObject);
         }
     }
 
