@@ -1,3 +1,4 @@
+using UnityEditor.Media;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -8,6 +9,7 @@ public class GameManager : MonoBehaviour
     public Spawner spawner;
     public AudioSource theme;
     public AudioSource button;
+    private int _score;
 
     private void Start()
     {
@@ -24,6 +26,8 @@ public class GameManager : MonoBehaviour
         player.enabled = true;
         spawner.enabled = true;
         button.Play();
+        theme.Pause();
+        ResetScore();
 
         SpawnChild[] cactus = FindObjectsOfType<SpawnChild>();
 
@@ -44,4 +48,15 @@ public class GameManager : MonoBehaviour
         gameOver.SetActive(true);
         Pause();
     }
+
+    public void ResetScore()
+    {
+        this._score = 0;
+    }
+
+    public void IncreaseScore()
+    {
+        this._score++;
+    }
+
 }

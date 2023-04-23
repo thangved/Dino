@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -109,6 +110,11 @@ public class Player : MonoBehaviour
             spriteRenderer.sprite = dieSprite;
             landAudio.Pause();
             dieAudio.Play();
+        }
+
+        if (collision.CompareTag("Scored"))
+        {
+            FindAnyObjectByType<GameManager>().IncreaseScore();
         }
     }
 }
